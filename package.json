@@ -1,0 +1,22 @@
+{
+  "name": "discord-bot-legend",
+  "version": "1.0.0",
+  "description": "Discord bot for The Legend server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "soon"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Di M Dub",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  }
+}
