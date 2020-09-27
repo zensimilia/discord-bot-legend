@@ -28,7 +28,8 @@ Simple Discord bot for The Legend Gamming Community. Can play music from Youtube
     "audio/perenosit_bazu.ogg",
     "audio/popopo.ogg",
     "audio/zarazhenka.ogg"
-  ]
+  ],
+  "jagerJokesInterval": 10
 }
 ```
 

@@ -31,7 +31,7 @@ client.once("ready", () => {
           dispatcher.on("finish", () => connection.disconnect());
         });
       }
-    }, 1000 * 60 * 10);
+    }, 1000 * 60 * config.jagerJokesInterval);
   }
 });
 
