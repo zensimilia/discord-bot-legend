@@ -9,8 +9,6 @@ client.once("ready", () => {
 
   console.log(`Logged in as ${client.user.tag}!`);
 
-  console.log(client.users.cache);
-
   // Text to speech https://cloud.yandex.ru/services/speechkit#demo
   if (config.jagerID && config.jagerJokes) {
     const jagerJokesInterval = setInterval(() => {
