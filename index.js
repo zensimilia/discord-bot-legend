@@ -5,21 +5,24 @@ const ytdl = require("ytdl-core");
 const fs = require("fs");
 
 client.once("ready", () => {
-  const guild = client.guilds.cache.get(config.guildID);
+  const guild = client.guilds.cache.first();
 
   console.log(`Logged in as ${client.user.tag}!`);
 
+  console.log(client.users.cache);
+
   // Text to speech https://cloud.yandex.ru/services/speechkit#demo
-  if (config.jagerJokes) {
+  if (config.jagerID && config.jagerJokes) {
     const jagerJokesInterval = setInterval(() => {
       let isJagerAvailable = guild.voiceStates.cache.some(
         (user) =>
           user.id === config.jagerID &&
           user.channelID !== null &&
-          user.channelID !== config.afkChannelID
+          user.channelID !== guild.afkChannelID &&
+          user.channelID !== config.pukanChannelID
       );
       if (isJagerAvailable) {
-        let jagerInChannel = guild.voiceStates.cache.get(config.adminID)
+        let jagerInChannel = guild.voiceStates.cache.get(config.jagerID)
           .channel;
         let jokeURL =
           config.jagerJokes[(Math.random() * config.jagerJokes.length) | 0];
@@ -27,11 +30,12 @@ client.once("ready", () => {
         jagerInChannel.join().then((connection) => {
           const dispatcher = connection.play(fs.createReadStream(jokeURL), {
             type: "ogg/opus",
+            volume: 0.75,
           });
           dispatcher.on("finish", () => connection.disconnect());
         });
       }
-    }, 1000 * 60 * config.jagerJokesInterval);
+    }, (1000 * 60 * config.jagerJokesInterval) | 20);
   }
 });
 

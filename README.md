@@ -4,33 +4,38 @@ Simple Discord bot for The Legend Gamming Community. Can play music from Youtube
 
 ## Setup and run
 
-1. Clone repo.
-2. Run `npm install` in project folder.
-3. Create `config.json` file in project folder:
+1. Clone repo and change working directory.
+2. Run `npm install`.
+3. Create and fill `config.json` file in project root directory.
+4. Run bot by command `npm run start`.
+
+## Configuration
+
+Params in `config.json`:
+
+- `"token"` (_required_, _string_) - Discord bot token.
+- `"pukanAudio"` (_required_, _string_, _URL_) - link to youtube video with music you want to play in specific voice cahnnel (e.g. _Pukan_).
+- `"pukanChannelID"` (_required_, _string_) - Discord ID of specific voice channel where music will play when any user connect to it.
+- `"adminID"` (_required_, _string_) - Discord ID of guild admin user used for error reports.
+- `"jagerID"` (_string_) - Discord user ID for which jokes will be played according to the interval (e.g. _Jager_).
+- `"jagerJokes"` (_array of strings_) - list of paths to audio OGG files with jokes. Bot will get random from this list.
+- `"jagerJokesInterval"` (_integer_) - interval in minites when the jokes will be played.
+
+Full `config.json` example:
 
 ```json
 {
   "token": "DISCORD_BOT_TOKEN",
   "pukanAudio": "https://www.youtube.com/watch?v=n7gVzTULDPo",
   "pukanChannelID": "PUKAN_CHANNEL_ID",
-  "afkChannelID": "AFK_CHANNEL_ID",
   "adminID": "GUILD_ADMIN_ID_FOR_ERROR_REPORTS",
-  "guildID": "GUILD_ID",
   "jagerID": "JAGER_ID_FOR_JOKES",
-  "jagerJokes": [
-    "audio/rembo.ogg",
-    "audio/ne_bombi.ogg",
-    "audio/bolshe_karet.ogg",
-    "audio/good_idea.ogg",
-    "audio/keep_calm.ogg",
-    "audio/kraken.ogg",
-    "audio/loot.ogg",
-    "audio/perenosit_bazu.ogg",
-    "audio/popopo.ogg",
-    "audio/zarazhenka.ogg"
-  ],
-  "jagerJokesInterval": 10
+  "jagerJokes": ["audio/rembo.ogg", "audio/zarazhenka.ogg"],
+  "jagerJokesInterval": 20
 }
 ```
 
-4. Run bot by command `node .` in project folder.
+## Requirements
+
+- **Node.js** >= 14.2.0
+- OS: Windows, Linux or Mac OS.
