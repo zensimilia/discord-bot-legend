@@ -27,8 +27,9 @@ client.once("ready", () => {
           user.channelID !== guild.afkChannelID &&
           user.channelID !== config.pukanChannelID
       );
+      let clientInPukan = client.voice.connections.get(config.pukanChannelID);
 
-      if (isJagerAvailable) {
+      if (isJagerAvailable && !clientInPukan) {
         let jagerInChannel = guild.voiceStates.cache.get(config.jagerID)
           .channel;
         let jokeURL =
@@ -39,7 +40,6 @@ client.once("ready", () => {
           .then((connection) => {
             const dispatcher = connection.play(fs.createReadStream(jokeURL), {
               type: "ogg/opus",
-              volume: 0.75,
             });
             dispatcher.on("finish", () => connection.disconnect());
           })
@@ -61,8 +61,9 @@ client.on("message", (message) => {
 });
 
 client.on("voiceStateUpdate", (oldState, newState) => {
+  if (newState.id === client.user.id) return; // ignore bot
+
   let newVoiceChannelID = newState.channelID;
-  let oldVoiceChannelID = oldState.channelID;
   let pukanChannel = client.channels.cache.get(config.pukanChannelID);
   let clientInPukanChannel = client.voice.connections.some(
     (conn) => conn.channel.id === config.pukanChannelID
@@ -76,7 +77,8 @@ client.on("voiceStateUpdate", (oldState, newState) => {
           const stream = ytdl(config.pukanAudio, {
             filter: "audioonly",
           });
-          connection.play(stream).on("finish", () => connection.disconnect());
+          const dispatcher = connection.play(stream);
+          dispatcher.on("finish", () => connection.disconnect());
         })
         .catch((error) => {
           sendAdminMessage("Pukan channel exception! " + error);
@@ -85,10 +87,9 @@ client.on("voiceStateUpdate", (oldState, newState) => {
     }
   }
 
-  if (oldVoiceChannelID === config.pukanChannelID) {
-    if (pukanChannel.members.size === 1 && clientInPukanChannel) {
-      pukanChannel.leave();
-    }
+  // Bot leaves Pukan channel if nobody listen him
+  if (pukanChannel.members.size === 1 && clientInPukanChannel) {
+    pukanChannel.leave();
   }
 });
 
