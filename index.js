@@ -53,10 +53,10 @@ client.once("ready", () => {
 });
 
 client.on("message", (message) => {
-  if (message.author.bot) return;
+  if (message.author.bot || message.guild) return;
 
   sendAdminMessage(
-    message.author.username + " wrote to me: >>> " + message.content
+    `${message.author.username} wrote to me: ${message.content}`
   );
 });
 
