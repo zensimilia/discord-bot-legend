@@ -4,6 +4,14 @@ const client = new Discord.Client();
 const ytdl = require("ytdl-core");
 const fs = require("fs");
 
+/**
+ * Send PM to user specified in config.json as adminID
+ * @param {string} message
+ */
+const sendAdminMessage = function (message) {
+  client.users.cache.get(config.adminID).send(message);
+};
+
 client.once("ready", () => {
   const guild = client.guilds.cache.first();
 
@@ -19,26 +27,37 @@ client.once("ready", () => {
           user.channelID !== guild.afkChannelID &&
           user.channelID !== config.pukanChannelID
       );
+
       if (isJagerAvailable) {
         let jagerInChannel = guild.voiceStates.cache.get(config.jagerID)
           .channel;
         let jokeURL =
           config.jagerJokes[(Math.random() * config.jagerJokes.length) | 0];
 
-        jagerInChannel.join().then((connection) => {
-          const dispatcher = connection.play(fs.createReadStream(jokeURL), {
-            type: "ogg/opus",
-            volume: 0.75,
+        jagerInChannel
+          .join()
+          .then((connection) => {
+            const dispatcher = connection.play(fs.createReadStream(jokeURL), {
+              type: "ogg/opus",
+              volume: 0.75,
+            });
+            dispatcher.on("finish", () => connection.disconnect());
+          })
+          .catch((error) => {
+            sendAdminMessage("Jager joke exception! " + error);
+            jagerInChannel.leave();
           });
-          dispatcher.on("finish", () => connection.disconnect());
-        });
       }
     }, (1000 * 60 * config.jagerJokesInterval) | 20);
   }
 });
 
 client.on("message", (message) => {
-  console.log(message.content);
+  if (message.author.bot) return;
+
+  sendAdminMessage(
+    message.author.username + " wrote to me: >>> " + message.content
+  );
 });
 
 client.on("voiceStateUpdate", (oldState, newState) => {
@@ -51,13 +70,18 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 
   if (newVoiceChannelID === config.pukanChannelID) {
     if (!clientInPukanChannel) {
-      pukanChannel.join().then((connection) => {
-        const stream = ytdl(config.pukanAudio, {
-          filter: "audioonly",
+      pukanChannel
+        .join()
+        .then((connection) => {
+          const stream = ytdl(config.pukanAudio, {
+            filter: "audioonly",
+          });
+          connection.play(stream).on("finish", () => connection.disconnect());
+        })
+        .catch((error) => {
+          sendAdminMessage("Pukan channel exception! " + error);
+          pukanChannel.leave();
         });
-        const dispatcher = connection.play(stream);
-        dispatcher.on("finish", () => connection.disconnect());
-      });
     }
   }
 
@@ -69,9 +93,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 });
 
 process.on("unhandledRejection", (error) => {
-  client.users.cache
-    .get(config.adminID)
-    .send("Uncaught Promise Rejection! " + error);
+  sendAdminMessage("Uncaught Promise Rejection! " + error);
 });
 
 client.login(config.token);
