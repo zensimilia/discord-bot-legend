@@ -1,6 +1,6 @@
 # discord-bot-legend
 
-Simple Discord bot for The Legend Gamming Community. Can play music from Youtube link in _Pukan_ voice channel and play short audio jokes if player _Jager_ online and joined to voice channel.
+Simple Discord bot for _The Legend Gaming Community_. Can play music from Youtube link in _Pukan_ voice channel and play short audio jokes if player _Jager_ online and joined to voice channel.
 
 ## Setup and run
 
@@ -30,7 +30,7 @@ Full `config.json` example:
   "pukanChannelID": "PUKAN_CHANNEL_ID",
   "adminID": "GUILD_ADMIN_ID_FOR_ERROR_REPORTS",
   "jagerID": "JAGER_ID_FOR_JOKES",
-  "jagerJokes": ["audio/joke.ogg", ...],
+  "jagerJokes": ["audio/joke.ogg", "audio/another_joke.ogg"],
   "jagerJokesInterval": 20
 }
 ```
