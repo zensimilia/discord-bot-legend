@@ -38,13 +38,18 @@ client.once("ready", () => {
         jagerInChannel
           .join()
           .then((connection) => {
-            const dispatcher = connection.play(fs.createReadStream(jokeURL), {
+            const stream = fs.createReadStream(jokeURL);
+            const dispatcher = connection.play(stream, {
               type: "ogg/opus",
+            });
+            stream.on("error", (error) => {
+              sendAdminMessage(`Jager joke stream exception! ${error}`);
+              jagerInChannel.leave();
             });
             dispatcher.on("finish", () => connection.disconnect());
           })
           .catch((error) => {
-            sendAdminMessage("Jager joke exception! " + error);
+            sendAdminMessage(`Jager joke exception! ${error}`);
             jagerInChannel.leave();
           });
       }
@@ -81,7 +86,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
           dispatcher.on("finish", () => connection.disconnect());
         })
         .catch((error) => {
-          sendAdminMessage("Pukan channel exception! " + error);
+          sendAdminMessage(`Pukan channel exception! ${error}`);
           pukanChannel.leave();
         });
     }
@@ -94,7 +99,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 });
 
 process.on("unhandledRejection", (error) => {
-  sendAdminMessage("Uncaught Promise Rejection! " + error);
+  sendAdminMessage(`Uncaught Promise Rejection! ${error}`);
 });
 
 client.login(config.token);
