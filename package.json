@@ -1,6 +1,6 @@
 {
   "name": "discord-bot-legend",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Discord bot for The Legend server.",
   "main": "index.js",
   "scripts": {

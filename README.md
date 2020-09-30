@@ -18,7 +18,7 @@ Params in `config.json`:
 - `"pukanChannelID"` (_required_, _string_) - Discord ID of specific voice channel where music will play when any user connect to it.
 - `"adminID"` (_required_, _string_) - Discord ID of guild admin user used for error reports.
 - `"jagerID"` (_string_) - Discord user ID for which jokes will be played according to the interval (e.g. _Jager_).
-- `"jagerJokes"` (_array of strings_) - list of paths to audio OGG files with jokes. Bot will get random from this list.
+- `"jagerJokes"` (_array of strings_) - list of paths to audio **OGG** files with jokes. Bot will get random from this list.
 - `"jagerJokesInterval"` (_integer_) - interval in minites when the jokes will be played.
 
 Full `config.json` example:
@@ -26,11 +26,11 @@ Full `config.json` example:
 ```json
 {
   "token": "DISCORD_BOT_TOKEN",
-  "pukanAudio": "https://www.youtube.com/watch?v=n7gVzTULDPo",
+  "pukanAudio": "LINK_TO_YOUTUBE_VIDEO",
   "pukanChannelID": "PUKAN_CHANNEL_ID",
   "adminID": "GUILD_ADMIN_ID_FOR_ERROR_REPORTS",
   "jagerID": "JAGER_ID_FOR_JOKES",
-  "jagerJokes": ["audio/rembo.ogg", "audio/zarazhenka.ogg"],
+  "jagerJokes": ["audio/joke.ogg", ...],
   "jagerJokesInterval": 20
 }
 ```
